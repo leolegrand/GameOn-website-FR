@@ -78,8 +78,6 @@ function isChecked(values) {
 // Vérifie que les inputs du formulaires sont tous valides et
 // empêche l'action par default du bouton submit.
 function validateInputs(e) {
-  e.preventDefault()
-
   const first = document.getElementById('first').value
   const last = document.getElementById('last').value
   const mail = document.getElementById('email').value
@@ -104,34 +102,43 @@ function validateInputs(e) {
     isChecked(locations) &&
     agreementCheckbox.checked
   ) {
+    alert('Merci! Votre réservation a été reçue')
     alertForm.textContent = ''
     console.log('Formulaire valide.')
     return true
   } else if (!validateNames(first)) {
+    e.preventDefault()
     formFirst.appendChild(alertForm)
     alertForm.textContent =
       'Veuillez entrer deux caractères ou plus pour le champ du prénom.'
   } else if (!validateNames(last)) {
+    e.preventDefault()
     formLast.appendChild(alertForm)
     alertForm.textContent =
       'Veuillez entrer deux caractères ou plus pour le champ du nom.'
   } else if (!validateEmail(mail)) {
+    e.preventDefault()
     formMail.appendChild(alertForm)
     alertForm.textContent = "L'adresse e-mail n'est pas valide."
   } else if (!isNotEmpty(birthdate)) {
+    e.preventDefault()
     formBirthdate.appendChild(alertForm)
     alertForm.textContent = 'Ce champs ne peut pas être vide.'
   } else if (!isNotEmpty(quantity)) {
+    e.preventDefault()
     formQuantity.appendChild(alertForm)
     alertForm.textContent = 'Ce champs ne peut pas être vide.'
   } else if (!isChecked(locations)) {
+    e.preventDefault()
     formLocations.appendChild(alertForm)
     alertForm.textContent = 'Veuillez choisir une option.'
   } else if (!agreementCheckbox.checked) {
+    e.preventDefault()
     formAgreement.appendChild(alertForm)
     alertForm.textContent =
       'Vous devez vérifier que vous acceptez les termes et conditions.'
   } else {
+    e.preventDefault()
     console.log('Formulaire invalide.')
     return false
   }
