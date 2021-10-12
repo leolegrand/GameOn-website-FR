@@ -12,12 +12,8 @@ const modalbg = document.querySelector('.bground')
 const modalBtn = document.querySelectorAll('.modal-btn')
 const formData = document.querySelectorAll('.formData')
 const closeBtn = document.querySelectorAll('.close')
-const tournamentQuantity = document.getElementById('quantity').value
-
-// Modèle de l'alerte pour les erreurs d'input
+const submitBtn = document.getElementById('btn-submit')
 let alertForm = document.createElement('p')
-alertForm.style.fontSize = '12px'
-alertForm.style.color = 'red'
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener('click', launchModal))
@@ -39,43 +35,27 @@ function closeModal() {
 // et contiennent au moins deux caractères
 function validateNames(names) {
   let namesFormat = /^\S[a-zA-Z-' ]{0,}\S$/
-  if (namesFormat.test(names)) {
-    return true
-  } else {
-    return false
-  }
+  return namesFormat.test(names) ? true : false
 }
 
 // Vérifie qu'une adresse email est valide.
 function validateEmail(inputEmail) {
   let mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-  if (mailFormat.test(inputEmail)) {
-    return true
-  } else {
-    return false
-  }
+  return mailFormat.test(inputEmail) ? true : false
 }
 
 // Vérifie que le champs n'est pas vide.
 function isNotEmpty(inputQuantity) {
-  if (inputQuantity.length == 0) {
-    console.log('Champs vide')
-    return false
-  } else {
-    return true
-  }
+  return inputQuantity.length === 0 ? false : true
 }
 
-// Vérifie qu'une localisation est bien cochée. POURQUOI ELSE FAIS DES CAPRICES?
-function isChecked(values) {
-  for (let value of values) {
-    if (value.checked) {
-      return true
-    }
-  }
+// Vérifie qu'une localisation est bien cochée.
+function isChecked(radiosBtn) {
+  return radiosBtn === null ? false : true
 }
 
-// Vérifie que les inputs du formulaires sont tous valides et
+// Vérifie que les inputs du formulaires sont tous valides,
+// sinon, affiche un message d'erreur &
 // empêche l'action par default du bouton submit.
 function validateInputs(e) {
   const first = document.getElementById('first').value
@@ -83,16 +63,8 @@ function validateInputs(e) {
   const mail = document.getElementById('email').value
   const birthdate = document.getElementById('birthdate').value
   const quantity = document.getElementById('quantity').value
-  const locations = document.getElementsByName('location')
   const agreementCheckbox = document.getElementById('checkbox1')
-  const formFirst = document.getElementById('form-first')
-  const formLast = document.getElementById('form-last')
-  const formMail = document.getElementById('form-mail')
-  const formBirthdate = document.getElementById('form-birthdate')
-  const formQuantity = document.getElementById('form-quantity')
-  const formLocations = document.getElementById('form-location')
-  const formAgreement = document.getElementById('form-agreement')
-
+  const locations = document.querySelector('input[name="location"]:checked')
   if (
     validateNames(first) &&
     validateNames(last) &&
@@ -103,38 +75,36 @@ function validateInputs(e) {
     agreementCheckbox.checked
   ) {
     alert('Merci! Votre réservation a été reçue')
-    alertForm.textContent = ''
-    console.log('Formulaire valide.')
     return true
   } else if (!validateNames(first)) {
     e.preventDefault()
-    formFirst.appendChild(alertForm)
+    formData[0].appendChild(alertForm)
     alertForm.textContent =
       'Veuillez entrer deux caractères ou plus pour le champ du prénom.'
   } else if (!validateNames(last)) {
     e.preventDefault()
-    formLast.appendChild(alertForm)
+    formData[1].appendChild(alertForm)
     alertForm.textContent =
       'Veuillez entrer deux caractères ou plus pour le champ du nom.'
   } else if (!validateEmail(mail)) {
     e.preventDefault()
-    formMail.appendChild(alertForm)
+    formData[2].appendChild(alertForm)
     alertForm.textContent = "L'adresse e-mail n'est pas valide."
   } else if (!isNotEmpty(birthdate)) {
     e.preventDefault()
-    formBirthdate.appendChild(alertForm)
+    formData[3].appendChild(alertForm)
     alertForm.textContent = 'Ce champs ne peut pas être vide.'
   } else if (!isNotEmpty(quantity)) {
     e.preventDefault()
-    formQuantity.appendChild(alertForm)
+    formData[4].appendChild(alertForm)
     alertForm.textContent = 'Ce champs ne peut pas être vide.'
   } else if (!isChecked(locations)) {
     e.preventDefault()
-    formLocations.appendChild(alertForm)
+    formData[5].appendChild(alertForm)
     alertForm.textContent = 'Veuillez choisir une option.'
   } else if (!agreementCheckbox.checked) {
     e.preventDefault()
-    formAgreement.appendChild(alertForm)
+    formData[6].appendChild(alertForm)
     alertForm.textContent =
       'Vous devez vérifier que vous acceptez les termes et conditions.'
   } else {
@@ -145,6 +115,4 @@ function validateInputs(e) {
 }
 
 // Au clique du bouton submit, validateInputs est appliquée.
-const submitBtn = document.getElementById('btn-submit')
-
 submitBtn.addEventListener('click', validateInputs)
